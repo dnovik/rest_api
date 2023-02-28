@@ -1,4 +1,4 @@
-package rest_api
+package main
 
 import (
 	"encoding/json"
@@ -67,7 +67,7 @@ func updateBook(w http.ResponseWriter, r *http.Request) {
 
 func deleteBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars()
+	params := mux.Vars(r)
 	for index, item := range books {
 		if item.ID == params["id"] {
 			books = append(books[:index], books[index+1:]...)
@@ -82,7 +82,7 @@ func main() {
 	books = append(books, Book{ID: "1", Title: "Война и мир", Author: &Author{Firstname: "Лев", Lastname: "Толстой"}})
 	books = append(books, Book{ID: "2", Title: "Преступление и наказание", Author: &Author{Firstname: "Фёдор", Lastname: "Достоевский"}})
 	r.HandleFunc("/books", getBooks).Methods("GET")
-	r.HandleFunc("/books/{id}", getBooks).Methods("GET")
+	r.HandleFunc("/books/{id}", getBook).Methods("GET")
 	r.HandleFunc("/books", createBook).Methods("POST")
 	r.HandleFunc("/books/{id}", updateBook).Methods("PUT")
 	r.HandleFunc("/books/{id}", deleteBook).Methods("DELETE")
